@@ -1,12 +1,13 @@
 # Snake - Par Jimmy Letecheur
 
+## Un projet pour le cours de Multimédia
+
+Pour l'examen de multimédia, notre professeur, Pierre-Antoine Delnatte, nous a demandé de réaliser un mini-jeu en à l'aide des technologies CANVAS/JAVASCRIPT. J'ai tout de suite pensé au jeu « Snake », qui m'a fait rester coller de nombreuses heures sur mon Nokia 3310 de l'époque. *PS : Il fonctionne toujours !*
+
 ## Game Design
 
-Le but du mini-jeu est de diriger un serpent dans un espace défini. Le serpent doit attraper des objets afin d'évoluer et de grandir, ce qui fera augmenter le score. Des petits points d'interrogations apparaitront à l'écran, provoquant un bonus au hasard, positif ou négatif pour le joueur du type :
+Le but du mini-jeu est de diriger un serpent dans un espace défini. Le serpent doit attraper des objets afin d'évoluer et de grandir, ce qui fera augmenter le score. Au démarrage du jeu, il y aura un message comme quoi on peu commencer à jouer en appuyant sur la touche `espace`. 
 
-- Apparition d'un mur infranchissable
-- Ajout de point supplémentaire au score
-- Division de la taille du serpent par 2
-- Vitesse augmentée x2, x3, x4
-- Vitesse diminuée par 2.
-- Obstacle au milieu du canvas.
+Dans le jeu, le serpent se déplacera à l'aide des fleches directionnelles du clavier `haut`, `bas`, `droite`, `gauche`. Dés qu'il attrapera une nourriture, le score montera d'un point et le serpent grandira. 
+
+Si le serpent touche l'une des extrémité du canvas, la partie s'arrête et affiche un message du style "Perdu ! Appuyez sur espace pour recommencer". Si le serpent vient « se mordre la queue », la partie s'arrête également.
