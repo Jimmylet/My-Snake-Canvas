@@ -23,19 +23,43 @@
             messageGameStart: "",
             messageGameOver: null,
             gameIsOver: true,
-            speed: 0,
+            speed: 18, // VITESSE DU SNAKE DE BASE
+            score: 0, // SCORE AU DEPART
 
             // GAME IS START
-            "gameIsStart": function(){
+            "gameIsStart": function() {
                 game.gameIsOver = false;
                 game.messageGameOver = null;
+                game.score = 0;
+                snake.start();
+                food.createFood();
+
             },
 
             // GAME IS OVER
-            "gameIsStop": function(){
+            "gameIsStop": function() {
                 game.gameIsOver = true;
                 game.messageGameStart = null;
                 game.messageGameOver = "";
+            },
+
+            "drawBox": function( x, y, size, color ) {
+                oContext.fillStyle = color;
+                oContext.beginPath();
+                oContext.moveTo( x - ( size / 2 ), y - ( size / 2 ) );
+                oContext.lineTo( x + ( size / 2 ), y - ( size / 2 ) );
+                oContext.lineTo( x + ( size / 2 ), y + ( size / 2 ) );
+                oContext.lineTo( x - ( size / 2 ), y + ( size / 2 ) );
+                oContext.closePath();
+                oContext.fill();
+            },
+
+            // Écrire le score
+            "writeScore": function() {
+                oContext.fillStyle = "#bdc3c7";
+                oContext.font = "25px px Helvetica, Arial";
+                oContext.textAlign = "center";
+                oContext.fillText( "Score : " + game.score, 105, 40 );
             },
 
             // MESSAGE GAME IS START
@@ -58,18 +82,6 @@
                 }
             },
 
-            // DESSINE LE BOITE
-            "drawBox": function( x, y, size, color ) {
-                oContext.fillStyle = color;
-                oContext.beginPath();
-                oContext.moveTo( x - ( size / 2 ), y - ( size / 2 ) );
-                oContext.lineTo( x + ( size / 2 ), y - ( size / 2 ) );
-                oContext.lineTo( x + ( size / 2 ), y + ( size / 2 ) );
-                oContext.lineTo( x - ( size / 2 ), y + ( size / 2 ) );
-                oContext.closePath();
-                oContext.fill();
-            },
-
             "resetGame": function() {
                 oContext.clearRect( 0, 0, oCanvas.width, oCanvas.height );
             }
@@ -78,25 +90,25 @@
 
         // Settings for the Snake
         snake = {
-            color: "#ecf0f1",
-            size: oCanvas.width / 40,
-            x: null,
-            y: null,
-            snakeDirection: "left",
-            section: [],
+            "color": "#ecf0f1",
+            "size": oCanvas.width / 40,
+            "x": null,
+            "y": null,
+            "snakeDirection": "left",
+            "section": [],
 
             "start": function() {
                 snake.section = [];
                 snake.snakeDirection = "left";
+                snake.x = oCanvas.width / 2 + snake.size / 2;
                 snake.y = oCanvas.height / 2 + snake.size / 2;
-                snake.x = oCanvas.height / 2 + snake.size / 2;
-                for ( snake.x + ( 6 * snake.size ); snake.x >= snake.x; snake.x -= snake.size) {
-                    snake.section.push( snake.x + "," + snake.y );
+                for ( var i = snake.x + ( 5 * snake.size); i >= snake.x; i -= snake.size ) {
+                    snake.section.push( i + "," + snake.y );
                 }
             },
 
             "moveSnake": function() {
-                switch (snake.direction) {
+                switch ( snake.snakeDirection ) {
                     case "left":
                         snake.x -= snake.size;
                         break;
@@ -108,14 +120,16 @@
                         break;
                     case "down":
                         snake.y += snake.size;
+                        break;
                 }
                 snake.checkIfCollision();
-                snake.section.push(snake.x + "," + snake.y);
+                snake.checkGrowth();
+                snake.section.push( snake.x + "," + snake.y );
             },
 
             "drawSnake": function( ) {
                 for ( var i = 0; i < snake.section.length; i++ ) {
-                    snake.drawSection(snake.section[i].split( "," ) );
+                    snake.drawSection( snake.section[ i ].split( "," ) );
                 }
             },
 
@@ -125,7 +139,7 @@
 
             // REGARDER SI IL Y A UNE COLLISION
             "checkIfCollision": function() {
-                if ( snake.isCollision(snake.x, snake.y) === true ) {
+                if ( snake.isCollision( snake.x, snake.y ) === true ) {
                     game.gameIsStop();
                 }
             },
@@ -135,19 +149,29 @@
                 if ( x < snake.size / 2 || x > oCanvas.width || y < snake.size / 2 || y > oCanvas.height || snake.section.indexOf( x + "," + y ) >= 0 ) {
                     return true;
                 }
+            },
+
+            "checkGrowth": function() {
+                if ( snake.x === food.x && snake.y === food.y ) {
+                    game.score++;
+                    if ( game.score % 5 === 0 && game.speed < 60 ) {
+                        game.speed++;
+                    }
+                    food.createFood();
+                } else {
+                    snake.section.shift();
+                }
             }
-
-
         };
 
 
 
         // Settings for the food
         food = {
-            size: null,
-            color: "#2ecc71",
-            x: null,
-            y: null,
+            "size": null,
+            "color": "#2ecc71",
+            "x": null,
+            "y": null,
 
             "createFood": function() {
                 food.size = snake.size;
@@ -187,36 +211,37 @@
             return null;
         };
 
-        addEventListener("keydown", function( e ) {
+        addEventListener( "keydown", function( e ) {
             lastKey = keys.getKey( e.keyCode );
-            if ( [ "up", "down", "left", "right" ].indexOf( lastKey ) >= 0 && lastKey !== inverseDirection[ snake.direction ] ) {
-                snake.direction = lastKey;
+            if ( [ "up", "down", "left", "right" ].indexOf( lastKey ) >= 0 && lastKey !== inverseDirection[ snake.snakeDirection ] ) {
+                snake.snakeDirection = lastKey;
             } else if ( [ "space" ].indexOf( lastKey ) >= 0 && game.gameIsOver ) {
                 game.gameIsStart();
             }
-        }, false);
+        }, false );
 
 
-        requestAnimationFrame = window.requestAnimationFrame;
+    requestAnimationFrame = window.requestAnimationFrame;
 
-        function loadSettings() {
-            if ( game.gameIsOver === false ) {
-                game.resetGame();
-                game.moveSnake()
-                food.drawFood();
-                snake.drawSnake();
-                game.drawMessageGameIsOver();
-            } else {
-                game.drawMessageGameIsStarted();
-            }
-
-            setTimeout(function() {
-                requestAnimationFrame(loadSettings);
-            }, 1000 / game.speed );
-
+    function loadSettings() {
+        if ( game.gameIsOver === false ) {
+            game.resetGame();
+            game.writeScore();
+            snake.moveSnake();
+            food.drawFood();
+            snake.drawSnake();
+            game.drawMessageGameIsOver();
+        } else {
+            game.drawMessageGameIsStarted();
         }
 
-        requestAnimationFrame( loadSettings() );
+        setTimeout( function() {
+            requestAnimationFrame( loadSettings );
+        }, 1000 / game.speed );
+
+    }
+
+    requestAnimationFrame( loadSettings );
 
 
 })();
