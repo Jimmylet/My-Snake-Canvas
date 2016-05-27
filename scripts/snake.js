@@ -11,6 +11,10 @@
             game,
             snake,
             food,
+            keys,
+            key,
+            lastKey,
+            inverseDirection,
             requestAnimationFrame,
 
     // Settings for the game
@@ -91,8 +95,26 @@
                 }
             },
 
-            "drawSnake": function() {
-                for (var i = 0; i < snake.section.length; i++ ) {
+            "moveSnake": function() {
+                switch (snake.direction) {
+                    case "left":
+                        snake.x -= snake.size;
+                        break;
+                    case "right":
+                        snake.x += snake.size;
+                        break;
+                    case "up":
+                        snake.y -= snake.size;
+                        break;
+                    case "down":
+                        snake.y += snake.size;
+                }
+                snake.checkIfCollision();
+                snake.section.push(snake.x + "," + snake.y);
+            },
+
+            "drawSnake": function( ) {
+                for ( var i = 0; i < snake.section.length; i++ ) {
                     snake.drawSection(snake.section[i].split( "," ) );
                 }
             },
@@ -114,6 +136,8 @@
                     return true;
                 }
             }
+
+
         };
 
 
@@ -137,12 +161,48 @@
 
         };
 
+        // Inverser les directions des mouvements
+        inverseDirection = {
+            "up": "down",
+            "left": "right",
+            "right": "left",
+            "down": "up"
+        };
+
+        // Initialiser les touches
+        keys = {
+            "left": [ 37 ], // Fleche gauche
+            "right": [ 39 ], // Fleche droite
+            "up": [ 38 ], // Fleche haut
+            "down": [ 40 ], // Fleche bas
+            "space": [ 32 ] // Barre d'espace
+        };
+
+        Object.prototype.getKey = function( value ) {
+            for( key in this ) {
+                if( this[ key ] instanceof Array && this[ key ].indexOf( value ) >= 0 ) {
+                    return key;
+                }
+            }
+            return null;
+        };
+
+        addEventListener("keydown", function( e ) {
+            lastKey = keys.getKey( e.keyCode );
+            if ( [ "up", "down", "left", "right" ].indexOf( lastKey ) >= 0 && lastKey !== inverseDirection[ snake.direction ] ) {
+                snake.direction = lastKey;
+            } else if ( [ "space" ].indexOf( lastKey ) >= 0 && game.gameIsOver ) {
+                game.gameIsStart();
+            }
+        }, false);
+
 
         requestAnimationFrame = window.requestAnimationFrame;
 
         function loadSettings() {
             if ( game.gameIsOver === false ) {
                 game.resetGame();
+                game.moveSnake()
                 food.drawFood();
                 snake.drawSnake();
                 game.drawMessageGameIsOver();
