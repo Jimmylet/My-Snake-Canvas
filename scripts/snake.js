@@ -7,10 +7,12 @@
     "use strict";
 
         var oCanvas = document.getElementById( "game" ),
-            oContext = oCanvas.getContext( "2d" );
+            oContext = oCanvas.getContext( "2d" ),
+            game,
+            snake,
 
         // Settings for the game
-        var game = {
+        game = {
 
             messageGameStart: "",
             messageGameOver: null,
@@ -50,6 +52,18 @@
                 }
             },
 
+            // DESSINE LE BOITE
+            "drawBox": function( x, y, size, color ) {
+                oContext.fillStyle = color;
+                oContext.beginPath();
+                oContext.moveTo( x - ( size / 2 ), y - ( size / 2 ) );
+                oContext.lineTo( x + ( size / 2 ), y - ( size / 2 ) );
+                oContext.lineTo( x + ( size / 2 ), y + ( size / 2 ) );
+                oContext.lineTo( x - ( size / 2 ), y + ( size / 2 ) );
+                oContext.closePath();
+                oContext.fill();
+            },
+
             "resetGame": function() {
                 oContext.clearRect( 0, 0, oCanvas.width, oCanvas.height );
             }
@@ -57,7 +71,39 @@
         };
 
         // Settings for the Snake
-        var snake = {};
+        snake = {
+            color: "#ecf0f1",
+            size: oCanvas.width / 40,
+            x: null,
+            y: null,
+            snakeDirection: "left",
+            section: [],
+
+            "start": function() {
+                snake.section = [];
+                snake.snakeDirection = "left";
+                snake.y = oCanvas.height / 2 + snake.size / 2;
+                snake.x = oCanvas.height / 2 + snake.size / 2;
+                for ( snake.x + ( 6 * snake.size ); snake.x >= snake.x; snake.x -= snake.size) {
+                    snake.section.push( snake.x + "," + snake.y );
+                }
+            },
+
+            "drawSnake": function() {
+                for (var i = 0; i < snake.section.length; i++ ) {
+                    snake.drawSection(snake.section[i].split( "," ) );
+                }
+            },
+
+            "drawSection": function( section ) {
+                game.drawBox( parseInt( section[ 0 ] ), parseInt( section[ 1 ] ), snake.size, snake.color );
+            }
+
+
+
+        };
+
+
 
         // Settings for the food
         var food = {};
