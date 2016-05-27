@@ -10,8 +10,10 @@
             oContext = oCanvas.getContext( "2d" ),
             game,
             snake,
+            food,
+            requestAnimationFrame,
 
-        // Settings for the game
+    // Settings for the game
         game = {
 
             messageGameStart: "",
@@ -20,13 +22,13 @@
             speed: 0,
 
             // GAME IS START
-            "start": function(){
+            "gameIsStart": function(){
                 game.gameIsOver = false;
                 game.messageGameOver = null;
             },
 
             // GAME IS OVER
-            "stop": function(){
+            "gameIsStop": function(){
                 game.gameIsOver = true;
                 game.messageGameStart = null;
                 game.messageGameOver = "";
@@ -97,23 +99,52 @@
 
             "drawSection": function( section ) {
                 game.drawBox( parseInt( section[ 0 ] ), parseInt( section[ 1 ] ), snake.size, snake.color );
+            },
+
+            // REGARDER SI IL Y A UNE COLLISION
+            "checkIfCollision": function() {
+                if ( snake.isCollision(snake.x, snake.y) === true ) {
+                    game.gameIsStop();
+                }
+            },
+
+            // SI COLLISION ...
+            "isCollision": function( x, y ) {
+                if ( x < snake.size / 2 || x > oCanvas.width || y < snake.size / 2 || y > oCanvas.height || snake.section.indexOf( x + "," + y ) >= 0 ) {
+                    return true;
+                }
             }
-
-
-
         };
 
 
 
         // Settings for the food
-        var food = {};
+        food = {
+            size: null,
+            color: "#2ecc71",
+            x: null,
+            y: null,
+
+            "createFood": function() {
+                food.size = snake.size;
+                food.x = ( Math.ceil( Math.random() * 10 ) * snake.size * 4 ) - snake.size / 2;
+                food.y = ( Math.ceil( Math.random() * 10 ) * snake.size * 3 ) - snake.size / 2;
+            },
+
+            "drawFood": function() {
+                game.drawBox(food.x, food.y, food.size, food.color);
+            }
+
+        };
 
 
-        var requestAnimationFrame = window.requestAnimationFrame;
+        requestAnimationFrame = window.requestAnimationFrame;
 
         function loadSettings() {
-            if ( game.over === false ) {
+            if ( game.gameIsOver === false ) {
                 game.resetGame();
+                food.drawFood();
+                snake.drawSnake();
                 game.drawMessageGameIsOver();
             } else {
                 game.drawMessageGameIsStarted();
@@ -125,7 +156,7 @@
 
         }
 
-        requestAnimationFrame(loadSettings());
+        requestAnimationFrame( loadSettings() );
 
 
 })();
