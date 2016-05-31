@@ -78,7 +78,8 @@
                     oContext.fillStyle = "white";
                     oContext.font = "28px helvetica, arial";
                     oContext.textAlign = "center";
-                    oContext.fillText( "Commences avec espace", oCanvas.width / 2, oCanvas.height / 2 );
+                    oContext.fillText( "Tu as perdu !", oCanvas.width / 2, oCanvas.height / 2 );
+                    oContext.fillText( "Rejoues avec espace", oCanvas.width / 2, oCanvas.height / 1.7);
                 }
             },
 
