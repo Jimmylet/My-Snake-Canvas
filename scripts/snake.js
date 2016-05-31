@@ -23,9 +23,9 @@
             messageGameStart: "",
             messageGameOver: null,
             gameIsOver: true,
-            speed: 18, // VITESSE DU SNAKE DE BASE
+            speed: 15, // VITESSE DU SNAKE DE BASE
             score: 0, // SCORE AU DEPART
-            level: 0, // NIVEAU AU DÉPART
+            level: 1, // NIVEAU AU DÉPART
 
             // GAME IS START
             "gameIsStart": function() {
@@ -41,6 +41,8 @@
             "gameIsStop": function() {
                 game.gameIsOver = true;
                 game.messageGameStart = null;
+                game.speed = 15;
+                game.level = 1;
                 game.messageGameOver = "";
             },
 
@@ -160,11 +162,13 @@
                 }
             },
 
+            // SCORE + LEVELS + FOODS
             "checkGrowth": function() {
                 if ( snake.x === food.x && snake.y === food.y ) {
                     game.score++;
-                    if ( game.score % 5 === 0 && game.speed < 60 ) {
-                        game.speed++;
+                    if ( game.score % 5 === 0 ) {
+                        game.speed = game.speed + 3;
+                        game.level++;
                     }
                     food.createFood();
                 } else {
