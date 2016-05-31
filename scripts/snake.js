@@ -88,8 +88,9 @@
                     oContext.fillStyle = "white";
                     oContext.font = "28px helvetica, arial";
                     oContext.textAlign = "center";
-                    oContext.fillText( "Tu as perdu !", oCanvas.width / 2, oCanvas.height / 2 );
-                    oContext.fillText( "Rejoues avec espace", oCanvas.width / 2, oCanvas.height / 1.7);
+                    oContext.fillText( "GAME OVER !", oCanvas.width / 2, oCanvas.height / 2 );
+                    oContext.fillText( "Ton score : " + game.score, oCanvas.width / 2, oCanvas.height / 1.7 );
+                    oContext.fillText( "Rejoues avec espace", oCanvas.width / 2, oCanvas.height / 1.5);
                 }
             },
 

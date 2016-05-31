@@ -19,4 +19,4 @@ Si le serpent touche l'une des extrémité du canvas, la partie s'arrête et aff
 - [x] Dessiner la nourriture  
 - [x] Gérer les collisions  
 - [x] Ajouter un game over
-- [ ] Ajouter des levels
+- [x] Ajouter des levels
