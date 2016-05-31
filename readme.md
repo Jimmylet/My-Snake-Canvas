@@ -20,3 +20,4 @@ Si le serpent touche l'une des extrémité du canvas, la partie s'arrête et aff
 - [x] Gérer les collisions  
 - [x] Ajouter un game over
 - [x] Ajouter des levels
+- [x] Ajouter un son au play et à la collision avec nourriture

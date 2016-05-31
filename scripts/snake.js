@@ -26,6 +26,9 @@
             speed: 15, // VITESSE DU SNAKE DE BASE
             score: 0, // SCORE AU DEPART
             level: 1, // NIVEAU AU DÉPART
+            sound: new Audio("../resources/sound_gradius_nemesis.wav"),
+            soundFood: new Audio("../resources/Beep8.wav"),
+
 
             // GAME IS START
             "gameIsStart": function() {
@@ -34,6 +37,8 @@
                 game.score = 0;
                 snake.start();
                 food.createFood();
+                game.sound.loop = true;
+                game.sound.play();
 
             },
 
@@ -172,6 +177,7 @@
                         game.level++;
                     }
                     food.createFood();
+                    game.soundFood.play();
                 } else {
                     snake.section.shift();
                 }
@@ -246,8 +252,11 @@
             food.drawFood();
             snake.drawSnake();
             game.drawMessageGameIsOver();
+
         } else {
             game.drawMessageGameIsStarted();
+            game.sound.pause();
+            game.sound.currentTime = 0;
         }
 
         setTimeout( function() {
