@@ -25,6 +25,7 @@
             gameIsOver: true,
             speed: 18, // VITESSE DU SNAKE DE BASE
             score: 0, // SCORE AU DEPART
+            level: 0, // NIVEAU AU DÉPART
 
             // GAME IS START
             "gameIsStart": function() {
@@ -60,6 +61,13 @@
                 oContext.font = "25px px Helvetica, Arial";
                 oContext.textAlign = "center";
                 oContext.fillText( "Score : " + game.score, 105, 40 );
+            },
+
+            "writeLevel": function() {
+                oContext.fillStyle = "1bdc3c7";
+                oContext.font = "20 px Helvetica, Arial";
+                oContext.textAlign = "center";
+                oContext.fillText( "Level : " + game.level, 540, 40 );
             },
 
             // MESSAGE GAME IS START
@@ -228,6 +236,7 @@
         if ( game.gameIsOver === false ) {
             game.resetGame();
             game.writeScore();
+            game.writeLevel();
             snake.moveSnake();
             food.drawFood();
             snake.drawSnake();
