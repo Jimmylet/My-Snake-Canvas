@@ -28,6 +28,7 @@
             level: 1, // NIVEAU AU DÉPART
             sound: new Audio("../resources/sound_gradius_nemesis.wav"),
             soundFood: new Audio("../resources/Beep8.wav"),
+            soundGameIsOver: new Audio("../resources/gameover.wav"),
 
 
             // GAME IS START
@@ -49,6 +50,7 @@
                 game.speed = 15;
                 game.level = 1;
                 game.messageGameOver = "";
+                game.soundGameIsOver.play();
             },
 
             "drawBox": function( x, y, size, color ) {
